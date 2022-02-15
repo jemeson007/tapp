@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "tapp-2cf94",
+    "staging": "tapp-2cf94"
+  },
+  "targets": {}
+}

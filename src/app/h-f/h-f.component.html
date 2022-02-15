@@ -1,0 +1,188 @@
+<mat-card><mat-toolbar><span><h3>Tapp</h3></span></mat-toolbar></mat-card>
+<br />
+<mat-card>
+<div class="container">
+  <div [hidden]="submitted" ng-app="hfList" ng-controller="hfListController">
+    <span> <mat-icon>home</mat-icon>
+     </span><br /><br />
+    <form class="hF" (ngSubmit)="onSubmit()" #hFForm="ngForm">
+      <mat-form-field class="hFFc" appearance="fill">
+        <label>Name </label>
+        <input [(ngModel)] = "model.name" name = "name" >
+      </mat-form-field><br />
+      <mat-form-field class="hFFc" appearance="fill">
+        <label>Agent  </label>
+        <input [(ngModel)] = "model.alterEgo" name= "alterEgo" >
+      </mat-form-field><br />
+      <mat-form-field class="hFFce" appearance="fill">
+        <label><span class="material-icons">mail  </span></label>
+        <input [(ngModel)] = "model.email" name = "email">
+      </mat-form-field><br /> 
+      <mat-form-field >
+        <mat-select placeholder="base expects" [(ngModel)]="model.power"  name= "power">
+          <label><span class="material-icons">work</span></label>
+          <mat-option *ngFor = "let aaa of q" value=[aaa.value]>{{ aaa.viewValue }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="form-group">
+        <label for="name">Name    </label>
+        <input type="text" class="form-control" id="name"
+               required
+               [(ngModel)]="model.name" name="name"
+               #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">
+          Name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="alterEgo">Agent  </label>
+        <input type="text" class="form-control" id="alterEgo" required
+               [(ngModel)]="model.alterEgo" name="alterEgo">
+      </div>
+
+      <div class="form-group">
+        <label for="email"><span class="material-icons"> mail </span></label>
+        <input type="text" class="form-control" id="email" required
+               [(ngModel)]="model.email" name="email">
+      </div>
+
+      <div class="form-group">
+        <label for="power"><span class="material-icons">work</span>    </label>
+        <select class="form-control" id="power"
+                required
+                [(ngModel)]="model.power" name="power"
+                #power="ngModel">
+          <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
+        </select>
+        <div [hidden]="power.valid || power.pristine" class="alert alert-danger">
+          Q-tip is required
+        </div>
+      </div> 
+<!-- ng-click="pushAgent()" -->
+      <button type="submit" class="btn btn-success" [disabled]="!hFForm.form.valid"  (click) = "addToHFi(model)" >Submit</button><span>  &nbsp;&nbsp;</span>
+      <button type="button" class="btn btn-primary" (click)="newHf(); hFForm.reset()"><mat-icon>add</mat-icon></button>
+    </form>
+  </div>
+
+  <div [hidden]="!submitted">
+    <h2>Here</h2>
+    <!-- <div *ngFor="let hf of model"> -->
+    <div class="row">
+      <div class="col-sm-3">Name  </div>
+      <div class="col-sm-9">  {{ model.name }}  </div>
+    </div><br />
+    <div class="row">
+      <div class="col-sm-3">Agent Name  </div>
+      <div class="col-sm-9">  {{ model.alterEgo }}  </div>
+    </div><br />
+    <div class="row">
+      <div class="col-sm-3">Agent Email  </div>
+      <div class="col-sm-9">  {{ model.email }}  </div>
+    </div><br />
+    <div class="row">
+      <div class="col-sm-3">Power  </div>
+      <div class="col-sm-9">  {{ model.power }}  </div>
+    </div>
+    <br>
+   <!-- </div> -->
+    <button class="btn btn-primary" (click)="submitted=false"><span class="material-icons">arrow_left</span>&nbsp;<span class="material-icons">arrow_right</span></button>
+  </div>
+
+   <!-- <h3>HF detail</h3>
+   <ul>
+<li ng-repeat=" let i in n" >{{ i.name }} </li>
+   </ul> -->
+
+   <!-- <br /> -->
+   <br />
+   
+</div>
+</mat-card>
+<!-- </div> -->
+
+
+<!-- <hr /> -->
+<br /> 
+<mat-card>
+<div class="s">
+    <!-- <h3 style="color:lightskyblue;">HF</h3> -->
+    <!-- <div *ngFor="let a of m"> -->
+      <table class="table table-striped table-hover table-sm caption-top">
+        <caption style="margin-left: 10px;"> HF</caption>
+        <thead>
+         
+            <td>Name</td>
+            <td>Agent</td>
+            <td>Agent e-mail</td>
+            <td>Grade</td>
+       
+          
+        </thead>
+        <tbody *ngFor = "let a of m | async ">
+          <tr>
+            <td>{{ a.name }} </td>
+            <td>{{ a.alterEgo }} </td>
+            <td>{{ a.email }} </td>
+            <td> {{ a.power }} </td>
+            <td> <span><button class="delete" title="del"
+              (click)="d(a)">x</button></span></td>
+            <!-- <td><span ng-click = "d()">x</span></td> -->
+          </tr>
+        </tbody>
+      </table>
+    <!-- </div> -->
+</div>
+</mat-card>
+<script>
+  var myA = angular.module("hFList", []);
+  myA.controller("hFListController", function($scope){
+      $scope.m= [];
+      // $scope.a=[];
+      // $scope.qTips = [];
+      // $scope.newAgent = "";
+      // $scope.newQ = "";
+      // $scope.pushAgent = function(){
+      //     if($scope.newAgent !== ""){
+      //         $scope.m.push($scope.newAgent);
+      //         $scope.newAgent = "";
+      //     }
+      //     // if($scope.newQ !== ""){
+      //     //     $scope.agents.qTips.push($scope.newQ);
+      //     //     $scope.newQ= "";
+      //     // }
+      // }
+      $scope.d = function(index){
+          $scope.m.splice(index, 1);
+          // $scope.qTips.splice(index, 1);
+      }
+  })
+  // const topAppBarElement = document.querySelector('.mdc-top-app-bar');
+  // const topAppBar = new MDCTopAppBar(topAppBarElement);
+</script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDlf6BNb-U7COoMgf4QjIrX3ggIOm4ozls",
+    authDomain: "tapp-2cf94.firebaseapp.com",
+    projectId: "tapp-2cf94",
+    storageBucket: "tapp-2cf94.appspot.com",
+    messagingSenderId: "920888608244",
+    appId: "1:920888608244:web:edf6871d80a62935a525a1",
+    measurementId: "G-CB38XK1Z81"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
